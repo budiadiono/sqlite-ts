@@ -1,0 +1,53 @@
+{
+  "name": "sqlite-ts",
+  "version": "0.0.1",
+  "description": "SQLite ORM for Typescript",
+  "main": "dist/index.js",
+  "typings": "typings/index.d.ts",
+  "files": [
+    "dist",
+    "typings"
+  ],
+  "scripts": {
+    "test": "jest",
+    "lint": "tslint 'src/**/*.ts{,x}'",
+    "compile": "tsc -d --declarationDir ./typings",
+    "build": "rm -rf typings && rm -rf dist && npm run compile && prettier ./typings/**/*.d.ts --write"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/budiadiono/sqlite-ts.git"
+  },
+  "keywords": [
+    "ORM",
+    "SQLite",
+    "ReactNative",
+    "Expo",
+    "Typescript"
+  ],
+  "author": "Budi Adiono <budiadiono@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/budiadiono/sqlite-ts/issues"
+  },
+  "homepage": "https://github.com/budiadiono/sqlite-ts#readme",
+  "peerDependencies": {},
+  "devDependencies": {
+    "@types/expo": "^30.0.0",
+    "@types/jest": "^23.3.5",
+    "@types/node": "^10.9.4",
+    "@types/react-native-sqlite-storage": "^3.3.1",
+    "@types/sqlite3": "^3.1.3",
+    "jest": "^23.6.0",
+    "prettier": "^1.14.2",
+    "sqlite3": "^4.0.3",
+    "ts-jest": "^23.10.4",
+    "tslib": "^1.9.3",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.15.0",
+    "typescript": "^3.0.3"
+  },
+  "dependencies": {
+    "reflect-metadata": "^0.1.12"
+  }
+}

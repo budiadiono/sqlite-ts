@@ -1,0 +1,7 @@
+node_modules/
+dist/
+tmp/
+typings/
+npm-debug.*
+yarn-error.*
+*.db
