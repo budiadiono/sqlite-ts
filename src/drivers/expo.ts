@@ -66,14 +66,14 @@ export class ExpoSQLiteDriver implements DbDriver {
       insertId,
       // @ts-ignore
       rowsAffected,
-      rows: { _array, item, length }
+      rows: { _array, length }
     } = result
     return {
       insertId,
       rowsAffected,
       rows: {
         length,
-        item,
+        item: index => _array[index],
         items: () => _array
       }
     }
