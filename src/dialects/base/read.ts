@@ -8,11 +8,15 @@ export interface IDialectLimitOffset<R> {
 }
 
 export interface IDialectOrderBy<M, R> {
-  orderBy(order?: { [P in keyof M]?: 'ASC' | 'DESC' }): IDialectLimitOffset<R>
+  orderBy(
+    order?: { [P in keyof M]?: 'ASC' | 'DESC' }
+  ): IDialectLimitOffset<R> & IDialectBase<R>
 }
 
 export interface IDialectWhere<M, R> {
-  where(condition?: ConditionFunction<M>): IDialectOrderBy<M, R>
+  where(
+    condition?: ConditionFunction<M>
+  ): IDialectBase<R> & IDialectOrderBy<M, R>
 }
 
 export class ReadDialect<M, R> extends DialectBase<M, R> {
@@ -41,7 +45,7 @@ export class ReadDialect<M, R> extends DialectBase<M, R> {
 
   public orderBy(
     order?: { [P in keyof M]?: 'ASC' | 'DESC' }
-  ): IDialectLimitOffset<R> {
+  ): IDialectLimitOffset<R> & IDialectBase<R> {
     if (order) {
       this.sql +=
         ' ORDER BY ' +
@@ -55,7 +59,7 @@ export class ReadDialect<M, R> extends DialectBase<M, R> {
 
   public where(
     condition?: ConditionFunction<M>
-  ): IDialectOrderBy<M, R> & IDialectLimitOffset<R> {
+  ): IDialectOrderBy<M, R> & IDialectLimitOffset<R> & IDialectBase<R> {
     if (condition) {
       this.sql += ` WHERE ${this._condSql(condition)}`
     }
