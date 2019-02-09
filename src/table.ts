@@ -60,7 +60,9 @@ export class Table<M, T extends ConstructorClass<M>, TDb> extends Dialect<
   async buildBackupSql() {
     const { db, name, columns } = this.info
 
-    const cols = Object.keys(columns).join(', ')
+    const cols = Object.keys(columns)
+      .map(c => Utils.quote(c))
+      .join(', ')
     const tbl = Utils.quote(name)
 
     // get data values
