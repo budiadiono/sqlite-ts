@@ -128,32 +128,36 @@ export class Db<T> {
   }
 
   async generateBackupSql() {
-    const sql: string[] = []
+    const sqlCreates: string[] = []
+    const sqlInserts: string[] = []
+
     for (const key of Object.keys(this.tables)) {
-      sql.push(await this.tables[key].buildBackupSql())
+      const tbl = this.tables[key]
+      tbl.create()
+      sqlCreates.push(tbl.sql)
+      sqlInserts.push(await tbl.buildBackupSql())
     }
-    return sql.filter(s => s !== '').join('\r\n')
+    return (
+      sqlCreates.join('\r\n') +
+      '\r\n' +
+      sqlInserts.filter(s => s !== '').join('\r\n')
+    )
   }
 
   async restoreFromSql(sql: string, recreate?: boolean) {
     if (recreate) {
       await this.dropAllTables()
-      await this.createAllTables()
     }
 
-    await this.transaction(({ exec, tables }) => {
-      const sqls = sql.split('INSERT INTO')
-      const tableNames = Object.keys(tables)
-      for (let s of sqls) {
-        s = s.trim()
-        if (s && s.length) {
-          // @ts-ignore
-          const tableName = s.match(/"(.*?)"/)[1]
-          if (tableNames.indexOf(tableName)) {
-            exec(`INSERT INTO ${s}`)
-          } else {
-            // TODO: should report to user that data is not exists?
+    await this.transaction(({ exec }) => {
+      const sqls = sql.split('\r\n')
+      for (const s of sqls) {
+        if (s.startsWith('CREATE')) {
+          if (recreate) {
+            exec(s)
           }
+        } else if (s.startsWith('INSERT')) {
+          exec(s)
         }
       }
     })
