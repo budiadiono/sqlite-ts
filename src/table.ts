@@ -71,12 +71,17 @@ export class Table<M, T extends ConstructorClass<M>, TDb> extends Dialect<
       return ''
     }
 
+    // build ordered column names
+    const keys = Object.keys(values[0])
+
     // build insert values sql
-    const sql = `INSERT INTO ${tbl} (${cols}) VALUES ${values
+    const sql = `INSERT INTO ${tbl} (${keys
+      .map(c => Utils.quote(c))
+      .join(', ')}) VALUES ${values
       .map(value => {
         return (
           '(' +
-          Object.keys(value)
+          keys
             .map(col =>
               Utils.asRawValue(this.info.columns[col].type, value[col])
             )
